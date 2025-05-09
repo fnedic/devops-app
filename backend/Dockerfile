@@ -1,31 +1,26 @@
-FROM openjdk:17-jdk-slim as build
+# Etapa de compilación
+FROM maven:3.9.5-eclipse-temurin-17 AS build
 
-# directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el pom.xml con las dependencias
+# Copia pom.xml y descarga dependencias primero
 COPY pom.xml .
-
-# Descargar dependencias de Maven
 RUN mvn dependency:go-offline
 
-# Copia el código fuente al contenedor
+# Copia el resto del código
 COPY src ./src
 
-# Realiza el build de la aplicación
+# Compila y empaqueta el proyecto
 RUN mvn clean package -DskipTests
 
-# Imagen final con solo el jar necesario
+# Etapa final - solo Java, sin Maven
 FROM openjdk:17-jdk-slim
 
-# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el archivo JAR generado desde la etapa de build
+# Copia el jar desde la etapa anterior
 COPY --from=build /app/target/devops-0.0.1-SNAPSHOT.jar app.jar
 
-# puerto
 EXPOSE 8080
 
-# Comando para ejecutar el JAR al iniciar el contenedor
 ENTRYPOINT ["java", "-jar", "app.jar"]
