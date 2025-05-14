@@ -21,6 +21,27 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
 
+    # ─────── ①  Servicio MySQL para los tests ───────
+    services:
+      mysql:
+        image: mysql:8.0
+        ports: ['3306:3306']
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: devopsdb
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_password
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -p$MYSQL_ROOT_PASSWORD"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:                                   # Disponible para *todos* los pasos
+      SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/devopsdb?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: test_user
+      SPRING_DATASOURCE_PASSWORD: test_password
+
     steps:
       # 1. Checkout del código
       - uses: actions/checkout@v4
