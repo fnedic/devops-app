@@ -60,7 +60,11 @@ jobs:
           npm run lint --if-present
           npm run build
 
-      # 5. Backend: tests JUnit / Mockito ─────────
+      # 5. Backend: tests JUnit / Mockito ─────────
+      - name: Set executable permission for mvnw
+        working-directory: backend
+        run: chmod +x mvnw
+
       - name: Backend tests
         working-directory: backend
         run: ./mvnw -B test
