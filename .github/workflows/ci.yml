@@ -91,7 +91,7 @@ jobs:
         run: ./mvnw -B test
 
 # ────────────────────────────────────────────────
-#  2) Publicar imágenes  (solo develop & main)
+#  2) Publicar imágenes  (solo developer & main)
 # ────────────────────────────────────────────────
   publish-docker:
     needs: build-test
@@ -99,23 +99,22 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      # Cambia REGISTRY + nombres si prefieres Docker Hub
-      REGISTRY: ghcr.io
-      IMAGE_FRONT: ${{ github.repository }}-frontend
-      IMAGE_BACK:  ${{ github.repository }}-backend
+      # Variables de entorno para el registro
+      REGISTRY: docker.io
+      IMAGE_FRONT: fnedic/devops-app-frontend
+      IMAGE_BACK:  fnedic/devops-app-backend
 
     steps:
       - uses: actions/checkout@v4
-
       # Buildx & QEMU para multi‑arch (opcional, pero rápido)
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
 
       # Login al registro (usa secrets de repo)
-      - name: Login to registry
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: docker.io
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
 
