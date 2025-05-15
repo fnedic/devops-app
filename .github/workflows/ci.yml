@@ -127,6 +127,7 @@ jobs:
           # tag SHA para trazabilidad; agrega ":latest" si es main
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_FRONT }}:${{ github.sha }}
+            fnedic/devops-app-backend:latest
           platforms: linux/amd64
 
       # Imagen del backend
@@ -137,4 +138,5 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_BACK }}:${{ github.sha }}
+            fnedic/devops-app-backend:latest
           platforms: linux/amd64
