@@ -1,0 +1,8 @@
+license_key: 199bbd86080e04d53bf03868cec42935FFFFNRAL
+
+enable_process_metrics: true
+status_server_enabled: true
+status_server_port: 18003
+
+custom_attributes:
+  nr_deployed_by: devops-grupo10
