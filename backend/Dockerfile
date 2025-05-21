@@ -5,10 +5,11 @@ WORKDIR /app
 
 # Copia pom.xml y descarga dependencias primero
 COPY backend/pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn -q dependency:go-offline
 
 # Copia el resto del código
 COPY backend/src ./src
+RUN mvn -q clean package -DskipTests
 
 # Compila y empaqueta el proyecto
 RUN mvn clean package -DskipTests
@@ -18,13 +19,15 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
+ARG NR_VERSION=latest
+RUN curl -Ls "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/${NR_VERSION}/newrelic-java.zip" \
+    | bsdtar -xf- -C /app --strip-components=1 newrelic/newrelic.jar
+
 # Copia el jar desde la etapa anterior
 COPY --from=build /app/target/devops-0.0.1-SNAPSHOT.jar app.jar
 
-# Copia el agente de New Relic
-COPY newrelic/newrelic/newrelic.jar newrelic.jar
-# COPY newrelic/newrelic/newrelic.yml newrelic.yml ## Lo dejo comentado y configuro variables de entorno 
+ENV JAVA_TOOL_OPTIONS="-javaagent:/app/newrelic.jar"
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-javaagent:/app/newrelic.jar", "-jar", "app.jar"]
+CMD ["java","-jar","/app/app.jar"]
