@@ -7,6 +7,13 @@ frontend/.env
 backend/target/
 backend/.env
 
+# New Relic
+/newrelic/newrelic/*.jar
+/newrelic/newrelic/*api*.jar
+/newrelic/newrelic/extension*.*
+/newrelic/newrelic/THIRD_PARTY_NOTICES.md
+/newrelic/newrelic/LICENSE
+
 # IDEs
 *.idea/
 *.vscode/
