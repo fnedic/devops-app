@@ -16,12 +16,12 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # ── New Relic agent ────────────────────────────────────────────
-ARG NR_VERSION=latest
+ARG NR_VERSION=current
 RUN set -e ; \
     apt-get update ; \
     apt-get install -y --no-install-recommends curl unzip ; \
-    curl -Ls "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/${NR_VERSION}/newrelic-java.zip" \
-      -o /tmp/nr.zip ; \
+    curl -fsSL "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/${NR_VERSION}/newrelic-java.zip" \
+        -o /tmp/nr.zip ; \
     unzip -j /tmp/nr.zip "*/newrelic.jar" -d /app ; \
     rm /tmp/nr.zip ; \
     apt-get purge -y --auto-remove curl unzip ; \
