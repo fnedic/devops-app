@@ -7,13 +7,19 @@ services:
       - backend
 
   backend:
-    build: ./backend
+    build:
+      context: ./
+      dockerfile: ./backend/Dockerfile
     ports:
       - "8080:8080"
     environment:
       DB_HOST_URL: mysql:3306/devopsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
       DB_USERNAME: root
       DB_KEY: ejemplo123
+      # Variables de entorno para New Relic (Agente de Java)
+      NEW_RELIC_APP_NAME: "devops-grupo10"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      NEW_RELIC_LOG_LEVEL: "info"
     depends_on:
       mysql:
         condition: service_healthy
@@ -35,5 +41,21 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
 
+  newrelic-infra:
+    container_name: newrelic-infra
+    build:
+      context: ./newrelic/infrastructure
+      dockerfile: Dockerfile
+    cap_add:
+      - SYS_PTRACE
+    network_mode: bridge
+    pid: host
+    privileged: true
+    volumes:
+      - "/:/host:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+    restart: unless-stopped
 volumes:
   mysql-data:
