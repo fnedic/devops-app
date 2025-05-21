@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 # directorio de trabajo en el contenedor
 WORKDIR /app
 
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
 # Copia los archivos package.json y package-lock.jso
 COPY package*.json ./
 

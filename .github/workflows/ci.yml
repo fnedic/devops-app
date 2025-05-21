@@ -124,6 +124,8 @@ jobs:
         with:
           context: ./frontend
           push: true
+          build-args: |
+            VITE_API_URL=https://fnedicdevops-app-backend.zeabur.app
           # tag SHA para trazabilidad; agrega ":latest" si es main
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_FRONT }}:${{ github.sha }}
