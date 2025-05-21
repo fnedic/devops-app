@@ -12,7 +12,7 @@ services:
 # ───────────────────────── BACK ──────────────────────────
   backend:
     build:
-      context: .                    # raíz ⇒ ve todo el repo
+      context: ./             
       dockerfile: backend/Dockerfile
     environment:
       # ① JDBC URL — NO pongas la credencial aquí
