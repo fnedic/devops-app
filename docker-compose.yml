@@ -18,7 +18,7 @@ services:
       DB_KEY: ejemplo123
       # Variables de entorno para New Relic (Agente de Java)
       NEW_RELIC_APP_NAME: "devops-grupo10"
-      NEW_RELIC_LICENSE_KEY: "199bbd86080e04d53bf03868cec42935FFFFNRAL"
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_LOG_LEVEL: "info"
     depends_on:
       mysql:
