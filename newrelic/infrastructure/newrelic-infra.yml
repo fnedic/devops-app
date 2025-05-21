@@ -1,4 +1,4 @@
-license_key: 199bbd86080e04d53bf03868cec42935FFFFNRAL
+license_key: ${NEW_RELIC_LICENSE_KEY}
 
 enable_process_metrics: true
 status_server_enabled: true
