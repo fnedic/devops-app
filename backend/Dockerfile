@@ -23,7 +23,7 @@ COPY --from=build /app/target/devops-0.0.1-SNAPSHOT.jar app.jar
 
 # Copia el agente de New Relic
 COPY newrelic/newrelic/newrelic.jar newrelic.jar
-COPY newrelic/newrelic/newrelic.yml newrelic.yml
+# COPY newrelic/newrelic/newrelic.yml newrelic.yml ## Lo dejo comentado y configuro variables de entorno 
 
 EXPOSE 8080
 
