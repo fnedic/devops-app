@@ -17,12 +17,15 @@ WORKDIR /app
 
 # ── New Relic agent ────────────────────────────────────────────
 ARG NR_VERSION=latest
-RUN apt-get update \
- && apt-get install -y --no-install-recommends curl libarchive-tools \
- && curl -Ls "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/${NR_VERSION}/newrelic-java.zip" \
-    | bsdtar -xOf- newrelic/newrelic.jar > /app/newrelic.jar \
- && apt-get purge -y --auto-remove curl libarchive-tools \
- && rm -rf /var/lib/apt/lists/*
+RUN set -e ; \
+    apt-get update ; \
+    apt-get install -y --no-install-recommends curl unzip ; \
+    curl -Ls "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/${NR_VERSION}/newrelic-java.zip" \
+      -o /tmp/nr.zip ; \
+    unzip -j /tmp/nr.zip "*/newrelic.jar" -d /app ; \
+    rm /tmp/nr.zip ; \
+    apt-get purge -y --auto-remove curl unzip ; \
+    rm -rf /var/lib/apt/lists/*
 
 # tu fichero de configuración (está en la raíz del contexto)
 COPY newrelic.yml /app/newrelic.yml
