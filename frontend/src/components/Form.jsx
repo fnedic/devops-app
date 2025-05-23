@@ -105,7 +105,7 @@ export default function Form() {
               }}
             >
               <Typography sx={{ fontWeight: "bold", fontSize: 30 }}>
-                Carga de productos
+                Product Upload
               </Typography>
             </Paper>
           </Grid>
