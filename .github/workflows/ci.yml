@@ -1,0 +1,144 @@
+name: CI
+
+# ────────────────────────────────────────────────
+#  Disparadores
+# ────────────────────────────────────────────────
+on:
+  push:
+    branches:
+      - main
+      - developer
+      - 'developer-*'
+  pull_request:
+    branches:
+      - main
+      - developer
+
+# ────────────────────────────────────────────────
+#  1) Build & Tests  (se ejecuta SIEMPRE)
+# ────────────────────────────────────────────────
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    # ─────── ①  Servicio MySQL para los tests ───────
+    services:
+      mysql:
+        image: mysql:8.0
+        ports: ['3306:3306']
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: devopsdb
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_password
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -p$MYSQL_ROOT_PASSWORD"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:                                   # Disponible para *todos* los pasos
+      SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/devopsdb?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: test_user
+      SPRING_DATASOURCE_PASSWORD: test_password
+
+    steps:
+      # 1. Checkout del código
+      - uses: actions/checkout@v4
+
+      # 2. Caches (Maven y npm)  ──────────────────
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ hashFiles('backend/pom.xml') }}
+          restore-keys: |
+            maven-
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            npm-
+
+      # 3. Entornos (Java 17 & Node 20) ───────────
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      # 4. Frontend: instalar, lint y build ──────
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
+
+      - name: Lint & build frontend
+        working-directory: frontend
+        run: |
+          npm run lint --if-present
+          npm run build
+
+      # 5. Backend: tests JUnit / Mockito ─────────
+      - name: Set executable permission for mvnw
+        working-directory: backend
+        run: chmod +x mvnw
+
+      - name: Backend tests
+        working-directory: backend
+        run: ./mvnw -B test
+
+# ────────────────────────────────────────────────
+#  2) Publicar imágenes  (solo developer & main)
+# ────────────────────────────────────────────────
+  publish-docker:
+    needs: build-test
+    if: github.ref == 'refs/heads/developer' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    env:
+      # Variables de entorno para el registro
+      REGISTRY: docker.io
+      IMAGE_FRONT: fnedic/devops-app-frontend
+      IMAGE_BACK:  fnedic/devops-app-backend
+
+    steps:
+      - uses: actions/checkout@v4
+      # Buildx & QEMU para multi‑arch (opcional, pero rápido)
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
+      # Login al registro (usa secrets de repo)
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+
+      # Imagen del frontend
+      - name: Build & push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          build-args: |
+            VITE_API_URL=${{ secrets.BACKEND_URL }}
+          # tag SHA para trazabilidad; agrega ":latest" si es main
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_FRONT }}:${{ github.sha }}
+            fnedic/devops-app-frontend:latest
+          platforms: linux/amd64
+
+      # Imagen del backend
+      - name: Build & push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_BACK }}:${{ github.sha }}
+            fnedic/devops-app-backend:latest
+          platforms: linux/amd64
