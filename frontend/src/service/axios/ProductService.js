@@ -25,6 +25,17 @@ class ProductService {
         throw error;
       });
   }
+  deleteProduct(id) {
+    return axios
+      .delete(API_URL + "/products/" + id)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error("Error deleting product:", error);
+        throw error;
+      });
+  }
 }
 
 export default new ProductService();
