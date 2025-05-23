@@ -190,19 +190,9 @@ Se ejecutan en Actions (`mvn test && npm test -- --watchAll=false`).
 
 ---
 
-## Road‑map
-
-*
-
----
-
 ## Contribuciones
 
-Los PRs son bienvenidos ⚡️.  Por favor:
-
-1. Abrí un *issue* describiendo el cambio.
-2. Usá rama `feature/<descripcion-corta>`.
-3. Ejecutá `npm run lint` y `./mvnw test` antes de *push*.
+Por el momento no aceptamos contribuciones ya que se trata de una practica universitaria. 
 
 ---
 
