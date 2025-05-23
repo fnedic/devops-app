@@ -1,6 +1,6 @@
 # DevOps App
 
-> **Full‑stack demo para la cátedra C2 – muestra un pipeline CI/CD completo con contenedores, deploy automático y monitoreo APM.**
+> **Full‑stack app para la materia DevOps de la Universidad de Palermo, Argentina – muestra un pipeline CI/CD completo con contenedores, deploy automático y monitoreo APM.**
 
 ---
 

@@ -68,7 +68,7 @@ export default function Tables({ products }) {
           }}
         >
           <Typography sx={{ fontWeight: "bold", fontSize: 30 }}>
-            Lista de productos
+            Product List
           </Typography>
         </Paper>
       </Grid>
