@@ -15,12 +15,12 @@ services:
       context: ./             
       dockerfile: backend/Dockerfile
     environment:
-      # ① JDBC URL — NO pongas la credencial aquí
+      # ① JDBC URL
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/devopsdb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${DB_ROOT_PWD}
 
-      # ② New Relic – el agente de Java (app.jar) leerá estas vars
+      # ② New Relic
       NEW_RELIC_APP_NAME: devops-grupo10
       NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
       NEW_RELIC_LOG_LEVEL: info
