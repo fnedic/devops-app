@@ -17,10 +17,11 @@
 9. [Monitoreo con New Relic](#monitoreo-con-new-relic)
 10. [Pruebas](#pruebas)
 11. [Convención de ramas](#convención-de-ramas)
-12. [Road‑map](#road-map)
-13. [Contribuciones](#contribuciones)
-14. [Licencia](#licencia)
-15. [Contacto](#contacto)
+12. [Versionado](#versionado)
+13. [Road‑map](#road-map)
+14. [Contribuciones](#contribuciones)
+15. [Licencia](#licencia)
+16. [Contacto](#contacto)
 
 ---
 
@@ -108,7 +109,6 @@ La SPA estará disponible en [http://localhost:5173](http://localhost:5173) y el
 | `MYSQL_ROOT_PASSWORD`   | `.env`                  | `root`                  | Password root MySQL |
 | `VITE_API_URL`          | build arg front         | `http://localhost:8080` | URL de la API       |
 | `NEW_RELIC_LICENSE_KEY` | GitHub Secrets + Zeabur | `******`                | Credencial APM      |
-| `SPRING_JWT_SECRET`     | GitHub Secrets + Zeabur | `super‑secret`          | Clave de firmas JWT |
 
 ---
 
@@ -154,8 +154,8 @@ Imagen resultante: **≈ 120 MB**.
 ## CI/CD en GitHub Actions
 
 1. `build-test`: levanta MySQL, corre tests, lint y build del front.
-2. `publish-docker`: (main/developer) construye y sube imágenes con tag SHA + `latest`.
-3. `deploy-zeabur`: (solo `main`) actualiza el servicio; historial de revisiones disponible para rollback.
+2. `publish-docker`: al pushear un **Git tag semántico** (`vX.Y.Z`), construye y sube imágenes etiquetadas con ese mismo número de versión (`v1.0.0`, etc.).
+3. `deploy-zeabur`: Zeabur permite elegir cualquier imagen por tag desde su dashboard web.
 
 Tiempo total: **\~4 min**.
 
@@ -187,6 +187,14 @@ Se ejecutan en Actions (`mvn test && npm test -- --watchAll=false`).
 * `main` → producción (protección + review obligatorio)
 * `developer` → integración continua
 * `feature/*` → desarrollo diario
+
+---
+
+## Versionado
+
+* Cada versión estable se etiqueta con un **Git tag** siguiendo el formato `vX.Y.Z`.
+* El push de un tag dispara automáticamente el build y push de imágenes Docker con ese número de versión como tag.
+* Zeabur permite elegir el tag específico al momento del despliegue.
 
 ---
 
