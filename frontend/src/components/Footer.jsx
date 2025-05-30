@@ -7,7 +7,7 @@ export default function Footer() {
     <Grid
       container
       sx={{
-        backgroundColor: "#10400c",
+        backgroundColor: "#0d2c40",
         padding: "50px",
         justifyContent: "space-between",
         alignItems: "center",
