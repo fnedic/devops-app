@@ -22,11 +22,15 @@ public class ProductController {
         return productService.getProducts();
     }
 
-    // endpoint for uploading a product
     @PostMapping("upload")
     public ResponseEntity<?> uploadProduct(@RequestBody ProductDto productDto) {
-        // Call the service to upload the product
         productService.uploadProduct(productDto);
         return ResponseEntity.ok("Product uploaded successfully");
     }
+
+    @DeleteMapping("products/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        throw new RuntimeException("This is a controlled error message!");
+    }
+
 }
