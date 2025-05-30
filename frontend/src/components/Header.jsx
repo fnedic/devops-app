@@ -30,7 +30,7 @@ export default function Header() {
           sx={{ width: 200, height: 150 }}
         />
         <Typography variant="h3" sx={{ color: "#02d35f", fontWeight: "bold" }}>
-          Project {version ? `v${version}` : ""}
+          Project {version ? `${version}` : ""}
         </Typography>
       </Grid>
       <Grid size={6} container sx={{ justifyContent: "right" }}>
