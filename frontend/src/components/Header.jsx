@@ -10,7 +10,7 @@ export default function Header() {
     <Grid
       container
       sx={{
-        backgroundColor: "#10400c",
+        backgroundColor: "#0d2c40",
         justifyContent: "space-between",
         alignItems: "center",
         mb: 5,
