@@ -128,6 +128,7 @@ jobs:
           push: true
           build-args: |
             VITE_API_URL=${{ secrets.BACKEND_URL }}
+            APP_VERSION=${{ env.VERSION }}
           # tag SHA para trazabilidad; agrega ":latest" si es main
           tags: |
             fnedic/devops-app-frontend:${{ env.VERSION }}
