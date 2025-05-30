@@ -5,17 +5,11 @@ name: CI
 # ────────────────────────────────────────────────
 on:
   push:
-    branches:
-      - main
-      - developer
-      - 'developer-*'
-  pull_request:
-    branches:
-      - main
-      - developer
+    tags:
+      - 'v*.*.*'
 
 # ────────────────────────────────────────────────
-#  1) Build & Tests  (se ejecuta SIEMPRE)
+#  1) Build & Tests
 # ────────────────────────────────────────────────
 jobs:
   build-test:
@@ -128,8 +122,7 @@ jobs:
             VITE_API_URL=${{ secrets.BACKEND_URL }}
           # tag SHA para trazabilidad; agrega ":latest" si es main
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_FRONT }}:${{ github.sha }}
-            fnedic/devops-app-frontend:latest
+            tags: ${{ env.REGISTRY }}/${{ env.IMAGE_FRONT }}:${{ env.VERSION }}
           platforms: linux/amd64
 
       # Imagen del backend
@@ -139,6 +132,5 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_BACK }}:${{ github.sha }}
-            fnedic/devops-app-backend:latest
+            tags: ${{ env.REGISTRY }}/${{ env.IMAGE_FRONT }}:${{ env.VERSION }}
           platforms: linux/amd64
