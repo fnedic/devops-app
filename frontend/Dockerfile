@@ -4,9 +4,10 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 ARG VITE_API_URL
+ARG VITE_APP_VERSION
+
 ENV VITE_API_URL=$VITE_API_URL
-ARG APP_VERSION
-ENV APP_VERSION=$APP_VERSION
+ENV VITE_APP_VERSION=$VITE_APP_VERSION
 
 # Copia los archivos package.json y package-lock.jso
 COPY package*.json ./
