@@ -4,6 +4,8 @@ import { Box } from "@mui/system";
 import logo from "../assets/devops.svg";
 
 export default function Header() {
+  const version = import.meta.env.VITE_APP_VERSION;
+
   return (
     <Grid
       container
@@ -28,7 +30,7 @@ export default function Header() {
           sx={{ width: 200, height: 150 }}
         />
         <Typography variant="h3" sx={{ color: "#02d35f", fontWeight: "bold" }}>
-          Project
+          Project {version ? `v${version}` : ""}
         </Typography>
       </Grid>
       <Grid size={6} container sx={{ justifyContent: "right" }}>
