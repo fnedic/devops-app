@@ -27,7 +27,7 @@ export default function Footer() {
       </Grid>
       <Grid size={3} sx={{ textAlign: "center", color: "#02d35f" }}>
         <Typography sx={{ display: "flex", alignContent: "center", gap: 1 }}>
-          {<School />}Universidad de Palermo - Mayo 2025
+          {<School />}Universidad de Palermo - Mayo 2024
         </Typography>
       </Grid>
       <Grid size={6} container sx={{ justifyContent: "right" }}>
