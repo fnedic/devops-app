@@ -1,8 +1,11 @@
+# ────────────────────────── 1) Build ──────────────────────────
+# Utilizamos una imagen de Node.js para construir la aplicación
 FROM node:20-alpine AS builder
 
 # directorio de trabajo en el contenedor
 WORKDIR /app
 
+# Variables de entorno para la configuración de Vite
 ARG VITE_API_URL
 ARG VITE_APP_VERSION
 
@@ -21,6 +24,7 @@ COPY . .
 # Realiza el build
 RUN npm run build
 
+# ────────────────────────── 2) Runtime ─────────────────────────
 # Utiliza una imagen de servidor
 FROM nginx:stable-alpine
 
